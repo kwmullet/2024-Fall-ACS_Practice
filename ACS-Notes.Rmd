@@ -1,0 +1,72 @@
+---
+title: "ACS notes"
+author: "Kevin Mullet &lt;kwm@unm.edu&gt;"
+date: "`r  format(Sys.time(), '%d %b %Y %H:%M:%S %Z (%z)')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyverse)
+library(tidycensus)
+```
+
+# 25:04 --- essentials of get_acs()
+- get_acs 
+    - requires tidycensus library
+    - min two parameters
+        geography
+        variables
+    - year (there's a default)
+    - survey
+        - defaults to "acs5"
+            - example had 3222 observations
+        - or use "acs1"
+            - more current, but only includes geogs &gt;= 65,000
+            - example below had 848 observations
+
+```{r essentials of get_acs()}
+
+median_value <- get_acs(
+    geography = "county",
+    variables = "B25077_001",
+    year = 2022,
+    survey = "acs5"
+)
+
+summary(median_value)
+
+```
+
+# 37:52 --- using table to get all related vars in a table at once
+
+
+```{r using a table}
+
+income_table <- get_acs(
+    geography = "county",
+    variables = "B27011_003" ,
+    year = 2022,
+    survey = "acs1"
+)
+
+```
+
+Browsing the variables for the acs1 for 2022:
+
+
+```{r browsing vars}
+
+vars <- load_variables(2022, "acs5", cache = TRUE)
+names(vars)
+vars[1:10,]
+fct_count(vars$geography)
+
+
+
+```
+
+
+
+
